@@ -8,8 +8,8 @@ baseUrl = "http://books.toscrape.com/"
 en_tete = ["product_page_url","universal_ product_code (upc)","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"]
 categoryLinks = []
 
-def getCategoryLinks(url):
-    page = requests.get(url)
+def getCategoryLinks():
+    page = requests.get(baseUrl)
     if len(categoryLinks) == 0:
         if page.ok:
             soup = BeautifulSoup(page.text, "html.parser")
@@ -109,8 +109,8 @@ def getInfos(book):
 
 def siteScraping():
     j = 0
-    for category in getCategoryLinks(baseUrl):
-        with open("data/" + category.split("books/")[1].split("_")[0] + ".csv", "w+", encoding="utf-16", newline="") as file:
+    for category in getCategoryLinks():
+        with open("data/" + getCategoryName(category) + ".csv", "w+", encoding="utf-16", newline="") as file:
             writer = csv.writer(file, delimiter="\t")
             writer.writerow(en_tete)
             i = 0
@@ -123,20 +123,47 @@ def siteScraping():
             print(str(i) + " livres trouvés dans la catégorie: " + infos[7])
     print(str(j) + " livres trouvés au total")
 
+def getCategoryName(category):
+    return category.split("books/")[1].split("_")[0]
+
+def selectCategory(window):
+    window.destroy()
+    window = Tk()
+    window.resizable(False, False)
+    window.title("Category selection")
+    window.geometry("600x300")
+    label = Label(window, text="Quelle catégorie voulez-vous scraper?")
+    label.grid(row=0,column=2)
+    i = 0
+    j = 1
+    for category in getCategoryLinks():
+        Button(window, text=getCategoryName(category), command=lambda:categoryScraping(category)).grid(row=j, column=i)
+        i += 1
+        if (i%5==0):
+            i = 0
+            j += 1
+    window.mainloop()
+
+def categoryScraping(category):
+    with open("data/" + getCategoryName(category) + ".csv", "w+", encoding="utf-16", newline="") as file:
+        writer = csv.writer(file, delimiter="\t")
+        writer.writerow(en_tete)
+        i = 0
+        for book in getBookLinks(category):
+            infos = getInfos(book)
+            writer.writerow(infos)
+            print(infos[7] + " - " + infos[2])
 
 def main():
     window = Tk()
-    window.resizable(False,False)
+    window.resizable(False, False)
     window.title("Web Scraping")
     window.geometry("250x75")
     label = Label(window, text="Quelles informations voulez-vous recuperer?")
     label.pack()
-    button1 = Button(window, text="livre")
-    button2 = Button(window, text="catégorie")
-    button3 = Button(window, text="site", command=siteScraping)
-    button1.pack(side=LEFT, expand=True)
-    button2.pack(side=LEFT, expand=True)
-    button3.pack(side=LEFT, expand=True)
+    Button(window, text="livre").pack(side=LEFT, expand=True)
+    Button(window, text="catégorie", command=lambda: selectCategory(window)).pack(side=LEFT, expand=True)
+    Button(window, text="site", command=siteScraping).pack(side=LEFT, expand=True)
     window.mainloop()
 
 if __name__=="__main__":
