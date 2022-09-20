@@ -137,7 +137,7 @@ def selectCategory(window):
     i = 0
     j = 1
     for category in getCategoryLinks():
-        Button(window, text=getCategoryName(category), command=lambda:categoryScraping(category)).grid(row=j, column=i)
+        Button(window, text=getCategoryName(category), command=lambda category=category:categoryScraping(category)).grid(row=j, column=i)
         i += 1
         if (i%5==0):
             i = 0
