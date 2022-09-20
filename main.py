@@ -110,7 +110,7 @@ def getInfos(book):
 def siteScraping():
     j = 0
     for category in getCategoryLinks():
-        with open("data/" + getCategoryName(category) + ".csv", "w+", encoding="utf-16", newline="") as file:
+        with open("data/site" + getCategoryName(category) + ".csv", "w+", encoding="utf-16", newline="") as file:
             writer = csv.writer(file, delimiter="\t")
             writer.writerow(en_tete)
             i = 0
@@ -144,8 +144,10 @@ def selectCategory(window):
             j += 1
     window.mainloop()
 
+
+
 def categoryScraping(category):
-    with open("data/" + getCategoryName(category) + ".csv", "w+", encoding="utf-16", newline="") as file:
+    with open("data/category/" + getCategoryName(category) + ".csv", "w+", encoding="utf-16", newline="") as file:
         writer = csv.writer(file, delimiter="\t")
         writer.writerow(en_tete)
         i = 0
@@ -154,6 +156,33 @@ def categoryScraping(category):
             writer.writerow(infos)
             print(infos[7] + " - " + infos[2])
 
+def getBookName(book):
+    return book.split("catalogue/")[1].split("_")[0]
+
+def bookScraping(book):
+    with open("data/book/" + getBookName(book) + ".csv", "w+", encoding="utf-16", newline="") as file:
+        writer = csv.writer(file, delimiter="\t")
+        writer.writerow(en_tete)
+        writer.writerow(getInfos(book))
+
+def selectBook(window):
+    window.destroy()
+    window = Tk()
+    window.resizable(False, False)
+    window.title("Book selection")
+    window.geometry("600x300")
+    label = Label(window, text="Quel livre voulez-vous scraper?")
+    label.grid(row=0,column=2)
+    i = 0
+    j = 1
+    for category in getCategoryLinks():
+        for book in getBookLinks(category):
+            Button(window, text=getBookName(book), command=lambda book=book:bookScraping(book)).grid(row=j, column=i)
+            i += 1
+            if (i%5==0):
+                i = 0
+                j += 1
+    window.mainloop()
 def main():
     window = Tk()
     window.resizable(False, False)
@@ -161,7 +190,7 @@ def main():
     window.geometry("250x75")
     label = Label(window, text="Quelles informations voulez-vous recuperer?")
     label.pack()
-    Button(window, text="livre").pack(side=LEFT, expand=True)
+    Button(window, text="livre", command=lambda: selectBook(window)).pack(side=LEFT, expand=True)
     Button(window, text="catégorie", command=lambda: selectCategory(window)).pack(side=LEFT, expand=True)
     Button(window, text="site", command=siteScraping).pack(side=LEFT, expand=True)
     window.mainloop()
