@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import csv
+from tkinter import *
+from tkinter import messagebox
 baseUrl = "http://books.toscrape.com/"
 en_tete = ["product_page_url","universal_ product_code (upc)","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"]
 categoryLinks = []
@@ -106,6 +108,7 @@ def getInfos(book):
                getCategory(soup), getRating(soup), getImgUrl(soup)]
 
 def main():
+    messagebox.askquestion("Options", "Quelles infos voulez-vous récuperer?")
     j = 0
     for category in getCategoryLinks(baseUrl):
         with open("data/" + category.split("books/")[1].split("_")[0] + ".csv", "w+", encoding="utf-16", newline="") as file:
