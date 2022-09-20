@@ -105,18 +105,21 @@ def getInfos(book):
                getPriceExcludingTax(soup), getNumberAvailable(soup), getProductDescription(soup),
                getCategory(soup), getRating(soup), getImgUrl(soup)]
 
-j = 0
-for category in getCategoryLinks(baseUrl):
-    with open("data/" + category.split("books/")[1].split("_")[0] + ".csv", "w+", encoding="utf-16", newline="") as file:
-        writer = csv.writer(file, delimiter="\t")
-        writer.writerow(en_tete)
-        i = 0
-        for book in getBookLinks(category):
-            infos = getInfos(book)
-            writer.writerow(infos)
-            print(infos[7] + " - " + infos[2])
-            i += 1
-            j += 1
-        print(str(i) + " livres trouvés dans la catégorie: " + infos[7])
-print(str(j) + " livres trouvés au total")
+def main():
+    j = 0
+    for category in getCategoryLinks(baseUrl):
+        with open("data/" + category.split("books/")[1].split("_")[0] + ".csv", "w+", encoding="utf-16", newline="") as file:
+            writer = csv.writer(file, delimiter="\t")
+            writer.writerow(en_tete)
+            i = 0
+            for book in getBookLinks(category):
+                infos = getInfos(book)
+                writer.writerow(infos)
+                print(infos[7] + " - " + infos[2])
+                i += 1
+                j += 1
+            print(str(i) + " livres trouvés dans la catégorie: " + infos[7])
+    print(str(j) + " livres trouvés au total")
 
+if __name__=="__main__":
+    main()
