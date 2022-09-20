@@ -108,7 +108,19 @@ def getInfos(book):
                getCategory(soup), getRating(soup), getImgUrl(soup)]
 
 def main():
-    messagebox.askquestion("Options", "Quelles infos voulez-vous récuperer?")
+    window = Tk()
+    window.resizable(False,False)
+    window.title("Web Scraping")
+    window.geometry("250x75")
+    list = Listbox(window)
+    label = Label(window, text="Quelles informations voulez-vous recuperer?")
+    list.insert(1, "Livre")
+    list.insert(2, "Catégorie")
+    list.insert(3, "Site")
+    list.configure(justify='center')
+    label.pack()
+    list.pack(fill = BOTH)
+    window.mainloop()
     j = 0
     for category in getCategoryLinks(baseUrl):
         with open("data/" + category.split("books/")[1].split("_")[0] + ".csv", "w+", encoding="utf-16", newline="") as file:
