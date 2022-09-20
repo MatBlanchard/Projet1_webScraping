@@ -6,7 +6,6 @@ baseUrl = "http://books.toscrape.com/"
 en_tete = ["product_page_url","universal_ product_code (upc)","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"]
 categoryLinks = []
 
-#je sais pas
 def getCategoryLinks(url):
     page = requests.get(url)
     if len(categoryLinks) == 0:
@@ -97,7 +96,15 @@ def getRating(soup):
 def getImgUrl(soup):
     return baseUrl + soup.find("img")["src"].split("../../")[1]
 
-#if __main__ ==
+def getInfos(book):
+    page = requests.get(book)
+    page.encoding = "utf-8"
+    if page.ok:
+        soup = BeautifulSoup(page.text, "html.parser")
+        return [book, getUpc(soup), getTitle(soup), getPriceIncludingTax(soup),
+               getPriceExcludingTax(soup), getNumberAvailable(soup), getProductDescription(soup),
+               getCategory(soup), getRating(soup), getImgUrl(soup)]
+
 j = 0
 for category in getCategoryLinks(baseUrl):
     with open("data/" + category.split("books/")[1].split("_")[0] + ".csv", "w+", encoding="utf-16", newline="") as file:
@@ -105,19 +112,11 @@ for category in getCategoryLinks(baseUrl):
         writer.writerow(en_tete)
         i = 0
         for book in getBookLinks(category):
-            page = requests.get(book)
-            page.encoding = "utf-8"
-            if page.ok:
-                soup = BeautifulSoup(page.text, "html.parser")
-                cat = getCategory(soup)
-                title = getTitle(soup)
-                row = [book,getUpc(soup),title,getPriceIncludingTax(soup),
-                       getPriceExcludingTax(soup),getNumberAvailable(soup),getProductDescription(soup),
-                       cat,getRating(soup),getImgUrl(soup)]
-                writer.writerow(row)
-                print(cat + " - " + title)
-                i += 1
-                j += 1
-        print(str(i) + " livres trouvés dans la catégorie: " + cat)
+            infos = getInfos(book)
+            writer.writerow(infos)
+            print(infos[7] + " - " + infos[2])
+            i += 1
+            j += 1
+        print(str(i) + " livres trouvés dans la catégorie: " + infos[7])
 print(str(j) + " livres trouvés au total")
 
