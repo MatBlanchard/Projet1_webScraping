@@ -107,20 +107,7 @@ def getInfos(book):
                getPriceExcludingTax(soup), getNumberAvailable(soup), getProductDescription(soup),
                getCategory(soup), getRating(soup), getImgUrl(soup)]
 
-def main():
-    window = Tk()
-    window.resizable(False,False)
-    window.title("Web Scraping")
-    window.geometry("250x75")
-    list = Listbox(window)
-    label = Label(window, text="Quelles informations voulez-vous recuperer?")
-    list.insert(1, "Livre")
-    list.insert(2, "Catégorie")
-    list.insert(3, "Site")
-    list.configure(justify='center')
-    label.pack()
-    list.pack(fill = BOTH)
-    window.mainloop()
+def siteScraping():
     j = 0
     for category in getCategoryLinks(baseUrl):
         with open("data/" + category.split("books/")[1].split("_")[0] + ".csv", "w+", encoding="utf-16", newline="") as file:
@@ -135,6 +122,22 @@ def main():
                 j += 1
             print(str(i) + " livres trouvés dans la catégorie: " + infos[7])
     print(str(j) + " livres trouvés au total")
+
+
+def main():
+    window = Tk()
+    window.resizable(False,False)
+    window.title("Web Scraping")
+    window.geometry("250x75")
+    label = Label(window, text="Quelles informations voulez-vous recuperer?")
+    label.pack()
+    button1 = Button(window, text="livre")
+    button2 = Button(window, text="catégorie")
+    button3 = Button(window, text="site", command=siteScraping)
+    button1.pack(side=LEFT, expand=True)
+    button2.pack(side=LEFT, expand=True)
+    button3.pack(side=LEFT, expand=True)
+    window.mainloop()
 
 if __name__=="__main__":
     main()
