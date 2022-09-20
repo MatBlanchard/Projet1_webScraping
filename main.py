@@ -6,6 +6,7 @@ baseUrl = "http://books.toscrape.com/"
 en_tete = ["product_page_url","universal_ product_code (upc)","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"]
 categoryLinks = []
 
+#je sais pas
 def getCategoryLinks(url):
     page = requests.get(url)
     if len(categoryLinks) == 0:
