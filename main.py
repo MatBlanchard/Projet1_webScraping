@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import re
 import csv
 from tkinter import *
+import os
 baseUrl = "http://books.toscrape.com/"
 en_tete = ["product_page_url","universal_ product_code (upc)","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"]
 categoryLinks = []
@@ -203,7 +204,14 @@ def mainMenu(window):
     Button(window, text="site", command=siteScraping).pack(side=LEFT, expand=True)
     window.mainloop()
 
+def createDir(path):
+    if not os.path.exists(path):
+        os.mkdir(path)
+
 def main():
+    createDir("data/book")
+    createDir("data/category")
+    createDir("data/site")
     mainMenu("firstlaunch")
 
 if __name__=="__main__":
