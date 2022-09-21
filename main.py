@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import re
 import csv
 from tkinter import *
-from tkinter import messagebox
 baseUrl = "http://books.toscrape.com/"
 en_tete = ["product_page_url","universal_ product_code (upc)","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"]
 categoryLinks = []
@@ -126,18 +125,25 @@ def siteScraping():
 def getCategoryName(category):
     return category.split("books/")[1].split("_")[0]
 
-def selectCategory(window):
+def selectCategory(window, mode):
     window.destroy()
     window = Tk()
     window.resizable(False, False)
     window.title("Category selection")
     window.geometry("600x300")
-    label = Label(window, text="Quelle catégorie voulez-vous scraper?")
+    if mode == "bookscraping":
+        label = Label(window, text="Selectionnez la catégorie du livre")
+    else:
+        label = Label(window, text="Quelle catégorie voulez-vous scraper?")
     label.grid(row=0,column=2)
+    Button(window, text="retour", command=lambda: mainMenu(window)).grid(row=0, column=3)
     i = 0
     j = 1
     for category in getCategoryLinks():
-        Button(window, text=getCategoryName(category), command=lambda category=category:categoryScraping(category)).grid(row=j, column=i)
+        if mode == "categoryscraping":
+            Button(window, text=getCategoryName(category), command=lambda category=category:categoryScraping(category)).grid(row=j, column=i)
+        else:
+            Button(window, text=getCategoryName(category), command=lambda category=category:selectBook(window, category)).grid(row=j, column=i)
         i += 1
         if (i%5==0):
             i = 0
@@ -165,35 +171,40 @@ def bookScraping(book):
         writer.writerow(en_tete)
         writer.writerow(getInfos(book))
 
-def selectBook(window):
+def selectBook(window, category):
     window.destroy()
     window = Tk()
     window.resizable(False, False)
     window.title("Book selection")
-    window.geometry("600x300")
-    label = Label(window, text="Quel livre voulez-vous scraper?")
-    label.grid(row=0,column=2)
+    label = Label(window, text="Selectionnez le livre à scraper")
+    label.grid(row=0,column=1)
+    Button(window, text="retour", command=lambda:selectCategory(window, "bookscraping")).grid(row=0, column=2)
     i = 0
     j = 1
-    for category in getCategoryLinks():
-        for book in getBookLinks(category):
+    for book in getBookLinks(category):
             Button(window, text=getBookName(book), command=lambda book=book:bookScraping(book)).grid(row=j, column=i)
             i += 1
-            if (i%5==0):
+            if (i%3==0):
                 i = 0
                 j += 1
     window.mainloop()
-def main():
+
+def mainMenu(window):
+    if window != "firstlaunch":
+        window.destroy()
     window = Tk()
     window.resizable(False, False)
     window.title("Web Scraping")
     window.geometry("250x75")
     label = Label(window, text="Quelles informations voulez-vous recuperer?")
     label.pack()
-    Button(window, text="livre", command=lambda: selectBook(window)).pack(side=LEFT, expand=True)
-    Button(window, text="catégorie", command=lambda: selectCategory(window)).pack(side=LEFT, expand=True)
+    Button(window, text="livre", command=lambda: selectCategory(window, "bookscraping")).pack(side=LEFT, expand=True)
+    Button(window, text="catégorie", command=lambda: selectCategory(window, "categoryscraping")).pack(side=LEFT, expand=True)
     Button(window, text="site", command=siteScraping).pack(side=LEFT, expand=True)
     window.mainloop()
+
+def main():
+    mainMenu("firstlaunch")
 
 if __name__=="__main__":
     main()
