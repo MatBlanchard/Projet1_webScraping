@@ -5,6 +5,7 @@ import csv
 from tkinter import *
 import os
 import urllib.request
+from textwrap import wrap
 baseUrl = "http://books.toscrape.com/"
 en_tete = ["product_page_url","universal_ product_code (upc)","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"]
 categoryLinks = []
@@ -174,7 +175,11 @@ def categoryScraping(category):
 
 
 def getBookName(book):
-    return book.split("catalogue/")[1].split("_")[0]
+    name = book.split("catalogue/")[1].split("_")[0]
+    if len(name) > 100:
+        name = wrap(name, 100)[0]
+    return name
+
 
 def bookScraping(book):
     with open("data/book/" + getBookName(book) + ".csv", "w+", encoding="utf-16", newline="") as file:
