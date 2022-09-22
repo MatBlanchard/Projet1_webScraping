@@ -4,6 +4,7 @@ import re
 import csv
 from tkinter import *
 import os
+import urllib.request
 baseUrl = "http://books.toscrape.com/"
 en_tete = ["product_page_url","universal_ product_code (upc)","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"]
 categoryLinks = []
@@ -110,18 +111,21 @@ def getInfos(book):
 def siteScraping():
     j = 0
     for category in getCategoryLinks():
-        with open("data/site" + getCategoryName(category) + ".csv", "w+", encoding="utf-16", newline="") as file:
+        with open("data/site/" + getCategoryName(category) + ".csv", "w+", encoding="utf-16", newline="") as file:
             writer = csv.writer(file, delimiter="\t")
             writer.writerow(en_tete)
             i = 0
             for book in getBookLinks(category):
                 infos = getInfos(book)
                 writer.writerow(infos)
+                urllib.request.urlretrieve(infos[9], "data/site/image/" + getBookName(book) + ".jpg")
                 print(infos[7] + " - " + infos[2])
                 i += 1
                 j += 1
-            print(str(i) + " livres trouvés dans la catégorie: " + infos[7])
+            print(str(i) + " livres trouvés dans la catégorie : " + infos[7])
     print(str(j) + " livres trouvés au total")
+    print("données du site obtenues avec succés et sauvegardées dans data/site")
+    print("images obtenues avec succés et sauvegardées dans data/site/image")
 
 def getCategoryName(category):
     return category.split("books/")[1].split("_")[0]
@@ -161,7 +165,13 @@ def categoryScraping(category):
         for book in getBookLinks(category):
             infos = getInfos(book)
             writer.writerow(infos)
+            urllib.request.urlretrieve(infos[9], "data/category/image/" + getBookName(book) + ".jpg")
             print(infos[7] + " - " + infos[2])
+            i += 1
+        print(str(i) + " livres trouvés")
+        print("données obtenues avec succés et sauvegardées dans data/category/" + getCategoryName(category) + ".csv")
+        print("images obtenues avec succés et sauvegardées dans data/category/image")
+
 
 def getBookName(book):
     return book.split("catalogue/")[1].split("_")[0]
@@ -170,7 +180,13 @@ def bookScraping(book):
     with open("data/book/" + getBookName(book) + ".csv", "w+", encoding="utf-16", newline="") as file:
         writer = csv.writer(file, delimiter="\t")
         writer.writerow(en_tete)
-        writer.writerow(getInfos(book))
+        infos = getInfos(book)
+        writer.writerow(infos)
+        urllib.request.urlretrieve(infos[9], "data/book/image/" + getBookName(book) + ".jpg")
+        print(infos[7] + " - " + infos[2])
+        print("image obtenue avec succés et sauvegardé dans data/book/image/" + getBookName(book) + ".jpg")
+        print("données obtenues avec succés et sauvegardées dans data/book/" + getBookName(book) + ".csv")
+
 
 def selectBook(window, category):
     window.destroy()
@@ -209,9 +225,13 @@ def createDir(path):
         os.mkdir(path)
 
 def main():
+    createDir("data")
     createDir("data/book")
     createDir("data/category")
     createDir("data/site")
+    createDir("data/book/image")
+    createDir("data/category/image")
+    createDir("data/site/image")
     mainMenu("firstlaunch")
 
 if __name__=="__main__":
