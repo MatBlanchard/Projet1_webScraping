@@ -119,14 +119,14 @@ def siteScraping():
             for book in getBookLinks(category):
                 infos = getInfos(book)
                 writer.writerow(infos)
-                urllib.request.urlretrieve(infos[9], "data/site/image/" + getBookName(book) + ".jpg")
+                urllib.request.urlretrieve(infos[9], "data/site/images/" + getBookName(book) + ".jpg")
                 print(infos[7] + " - " + infos[2])
                 i += 1
                 j += 1
             print(str(i) + " livres trouvés dans la catégorie : " + infos[7])
     print(str(j) + " livres trouvés au total")
     print("données du site obtenues avec succés et sauvegardées dans data/site")
-    print("images obtenues avec succés et sauvegardées dans data/site/image")
+    print("images obtenues avec succés et sauvegardées dans data/site/images")
 
 def getCategoryName(category):
     return category.split("books/")[1].split("_")[0]
@@ -166,12 +166,12 @@ def categoryScraping(category):
         for book in getBookLinks(category):
             infos = getInfos(book)
             writer.writerow(infos)
-            urllib.request.urlretrieve(infos[9], "data/category/image/" + getBookName(book) + ".jpg")
+            urllib.request.urlretrieve(infos[9], "data/category/images/" + getBookName(book) + ".jpg")
             print(infos[7] + " - " + infos[2])
             i += 1
         print(str(i) + " livres trouvés")
         print("données obtenues avec succés et sauvegardées dans data/category/" + getCategoryName(category) + ".csv")
-        print("images obtenues avec succés et sauvegardées dans data/category/image")
+        print("images obtenues avec succés et sauvegardées dans data/category/images")
 
 
 def getBookName(book):
@@ -187,9 +187,9 @@ def bookScraping(book):
         writer.writerow(en_tete)
         infos = getInfos(book)
         writer.writerow(infos)
-        urllib.request.urlretrieve(infos[9], "data/book/image/" + getBookName(book) + ".jpg")
+        urllib.request.urlretrieve(infos[9], "data/book/images/" + getBookName(book) + ".jpg")
         print(infos[7] + " - " + infos[2])
-        print("image obtenue avec succés et sauvegardé dans data/book/image/" + getBookName(book) + ".jpg")
+        print("image obtenue avec succés et sauvegardé dans data/book/images/" + getBookName(book) + ".jpg")
         print("données obtenues avec succés et sauvegardées dans data/book/" + getBookName(book) + ".csv")
 
 
@@ -234,9 +234,9 @@ def main():
     createDir("data/book")
     createDir("data/category")
     createDir("data/site")
-    createDir("data/book/image")
-    createDir("data/category/image")
-    createDir("data/site/image")
+    createDir("data/book/images")
+    createDir("data/category/images")
+    createDir("data/site/images")
     mainMenu("firstlaunch")
 
 if __name__=="__main__":
