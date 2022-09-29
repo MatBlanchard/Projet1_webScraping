@@ -230,6 +230,7 @@ def createDir(path):
         os.mkdir(path)
 
 def main():
+    print("création de l'arborescence...")
     createDir("data")
     createDir("data/book")
     createDir("data/category")
@@ -237,6 +238,7 @@ def main():
     createDir("data/book/images")
     createDir("data/category/images")
     createDir("data/site/images")
+    print("arborescence créée avec succés !")
     mainMenu("firstlaunch")
 
 if __name__=="__main__":
