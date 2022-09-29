@@ -230,7 +230,6 @@ def createDir(path):
         os.mkdir(path)
 
 def main():
-    print("création de l'arborescence...")
     createDir("data")
     createDir("data/book")
     createDir("data/category")
