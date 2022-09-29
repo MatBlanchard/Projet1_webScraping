@@ -14,7 +14,7 @@ Création et utilisation de l'environnement virtuel:
 
 7) utilisez la commande : pip install beautifulsoup4==4.11.1
 
-8) déplacez-vous à l'endroit ou se trouve le fichier main.py que vous venez de télécharger
+8) déplacez-vous à l'endroit ou se trouve le fichier main.py que vous venez de télécharger en utilisant la commande : cd
 
 9) utilisez la commande main.py
 
