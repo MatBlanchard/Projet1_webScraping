@@ -1,12 +1,23 @@
-Pour utiliser l'application :
+Version python recommandée : 3.10.7 https://www.python.org/downloads/
 
-1) Télécharger et installer python 3.10.7 https://www.python.org/downloads/
+Création et utilisation de l'environnement virtuel:
 
-(l'application peut étre compatible avec des versions plus anciennes de Python mais ce n'est pas garanti et il est vivement recommandé d'utiliser la version 3.10.7 de Python)
+1) utilisez la commande : python -m venv env
 
-2) Télécharger et lancer main.py
+2) utilisez la commande : cd env/Scripts
 
-(l'application va créer une arborescence de fichier à l'endroit ou vous l'avez lancée, cette arborescence servira à stocker les données récupérées depuis le site)
+4) utilisez la commande : activate
+
+5) utilisez la commande : pip install requests==2.28.1
+
+6) utilisez la commande : pip install bs4==0.0.1
+
+7) utilisez la commande : pip install beautifulsoup4==4.11.1
+
+8) déplacez-vous à l'endroit ou se trouve le fichier main.py que vous venez de télécharger
+
+9) utilisez la commande main.py
+
 
 Note :
 
