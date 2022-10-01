@@ -8,15 +8,11 @@ Création et utilisation de l'environnement virtuel:
 
 4) utilisez la commande : activate
 
-5) utilisez la commande : pip install requests==2.28.1
+5) utilisez la commande : pip install -r requirements.txt
 
-6) utilisez la commande : pip install bs4==0.0.1
+6) déplacez-vous à l'endroit ou se trouve le fichier main.py que vous venez de télécharger en utilisant la commande : cd
 
-7) utilisez la commande : pip install beautifulsoup4==4.11.1
-
-8) déplacez-vous à l'endroit ou se trouve le fichier main.py que vous venez de télécharger en utilisant la commande : cd
-
-9) utilisez la commande main.py
+7) utilisez la commande main.py
 
 
 Note :
